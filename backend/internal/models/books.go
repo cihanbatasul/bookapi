@@ -38,8 +38,8 @@ type VolumeInfo struct {
 	ISBN          string   `json:"industryIdentifiers.0.identifier"`
 }
 
-func (b *BookServiceImplementation) SearchBook(query, apiKey string) (BooksResponse, error) {
-	url := fmt.Sprintf("https://www.googleapis.com/books/v1/volumes?q=%s&key=%s", query, apiKey)
+func (b *BookServiceImplementation) SearchBook(query, apiKey string, startIndex, maxResults int) (BooksResponse, error) {
+	url := fmt.Sprintf("https://www.googleapis.com/books/v1/volumes?q=%s&key=%s&startIndex=%d&maxResults=%d", query, apiKey, startIndex, maxResults)
 
 	response, err := http.Get(url)
 	if err != nil {
@@ -55,8 +55,4 @@ func (b *BookServiceImplementation) SearchBook(query, apiKey string) (BooksRespo
 	}
 
 	return searchResult, nil
-}
-
-func (b *BookServiceImplementation) getSpecificBook(bookUrl, apiKey string) (FullBook, error) {
-
 }
