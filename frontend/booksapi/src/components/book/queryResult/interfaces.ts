@@ -13,6 +13,7 @@ export interface Query {
     etag: string
     selfLink: string
     volumeInfo: VolumeInfo
+    onClick: (input: string) => void
 }
 
 

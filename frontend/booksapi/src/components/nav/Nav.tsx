@@ -8,7 +8,7 @@ const Nav = () => {
 
 
   return (
-    <motion.div className="sticky top-0 flex flex-row justify-between bg-darker items-center p-4 text-black">
+    <motion.div className="sticky top-0 flex flex-row justify-between bg-darker items-center p-4 text-black z-50">
     <motion.div>
       <img className="h-14" src={logo} alt="site logo"/>
     </motion.div>

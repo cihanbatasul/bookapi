@@ -8,6 +8,7 @@ import (
 
 type BookService interface {
 	SearchForBook(query, apiKey string) ([]BooksResponse, error)
+	RetrieveBook(bookID, apiKey string) (GoogleBooksVolume, error)
 }
 
 type BookServiceImplementation struct {
@@ -55,4 +56,26 @@ func (b *BookServiceImplementation) SearchBook(query, apiKey string, startIndex,
 	}
 
 	return searchResult, nil
+}
+
+func (b *BookServiceImplementation) RetrieveBook(bookID string, apiKey string) (GoogleBooksVolume, error) {
+
+	url := fmt.Sprintf("https://www.googleapis.com/books/v1/volumes/%s?key=%s", bookID, apiKey)
+
+	response, err := http.Get(url)
+
+	if err != nil {
+		return GoogleBooksVolume{}, err
+	}
+
+	defer response.Body.Close()
+
+	var searchResult GoogleBooksVolume
+	err = json.NewDecoder(response.Body).Decode(&searchResult)
+	if err != nil {
+		return GoogleBooksVolume{}, err
+	}
+
+	return searchResult, nil
+
 }

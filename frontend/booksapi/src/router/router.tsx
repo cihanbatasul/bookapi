@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import Home from '../views/Home'
 import SearchPage from '../views/SearchPage'
 import SearchResults from '../views/SearchResults'
+import BookView from "../views/BookView"
 
 
 const AnimatedRoutes = () => {
@@ -20,6 +21,7 @@ const AnimatedRoutes = () => {
     <Route path="/" element={<Home/>}/>
     <Route path="/search" element={<SearchPage/>}/>
     <Route path="/searchresults" element={<SearchResults/>}/>
+    <Route path="/book/:id" element={<BookView/>}/>
 
 </Routes>
 

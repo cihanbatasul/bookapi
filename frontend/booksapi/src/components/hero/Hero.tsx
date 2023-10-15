@@ -1,11 +1,13 @@
 import SearchBar from "../SearchBar"
 import MobileFilterMenu from "./MobileFilterMenu"
-import { motion } from "framer-motion"
-import { useEffect, useState } from "react"
+import {motion} from "framer-motion"
+import {Key, useEffect, useState} from "react"
 import QueryResult from "../book/queryResult/QueryResult"
-import { Query } from "../book/queryResult/interfaces"
-import { useSelector } from "react-redux"
-import { RootState } from "../../store/store"
+import {Query} from "../book/queryResult/interfaces"
+import {useSelector} from "react-redux"
+import {RootState} from "../../store/store"
+import {useNavigate} from "react-router-dom"
+
 const Hero = () => {
   const [SearchResults,setSearchResults] = useState<Query[]>([])
   const [loading, setLoading] = useState(false)
@@ -13,6 +15,12 @@ const Hero = () => {
   
 
   const maxResults = useSelector((state: RootState) => state.filter.maxBooks)
+
+  const navigate = useNavigate()
+  const handleViewClick  = (bookID: string) => {
+    navigate(`/book/${bookID}`)
+  }
+
 
   const handleSearchSubmit = async (searchQuery: string) => {
 
@@ -37,6 +45,9 @@ const Hero = () => {
  useEffect(() => {
   console.log(maxResults)
  }, [maxResults])
+
+ 
+
   return (
 
     <motion.div className=" h-full bg-light text-black flex flex-col items-center  justify-center  text-justify p-3 gap-6">
@@ -44,7 +55,7 @@ const Hero = () => {
       Willkommen auf meiner Books API. Aufgebaut auf der Google Books API, erlaubt sie alles, was man von einer Books API erwartet und mehr.
       </motion.div>
       <motion.div className="search">
-        <motion.div>
+        <motion.div className="mb-2">
         Tätigen Sie Ihre erste Suche: 
         </motion.div>
         <SearchBar onClick={handleSearchSubmit}/>
@@ -52,8 +63,10 @@ const Hero = () => {
 <MobileFilterMenu/>
 {loading ? <motion.div>Loading...</motion.div> :  SearchResults && SearchResults.map((item => {
   return (
-    <motion.div className="text-justify w-full lg:w-[70%] flex flex-col items-center ">
-  <QueryResult key={item.id} id={item.id} etag={item.etag} selfLink={item.selfLink} volumeInfo={item.volumeInfo} />
+    <motion.div
+
+    className="text-justify w-full lg:w-[70%] flex flex-col ">
+  <QueryResult onClick={handleViewClick} key={item.id} id={item.id} etag={item.etag} selfLink={item.selfLink} volumeInfo={item.volumeInfo} />
     
     <hr className="w-full h-px my-8 bg-darker border-0 dark:bg-darker"/>
     </motion.div>

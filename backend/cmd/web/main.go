@@ -59,11 +59,11 @@ func main() {
 	}
 
 	defer db.Close()
-	test := models.BookServiceImplementation{}
+	bookService := models.BookServiceImplementation{}
 	app := &application{
 		error_log: error_log,
 		info_log:  info_log,
-		books:     &test,
+		books:     &bookService,
 	}
 
 	handler := cors.Handler(app.Routes())
