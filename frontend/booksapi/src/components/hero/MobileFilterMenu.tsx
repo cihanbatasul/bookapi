@@ -1,76 +1,78 @@
-import { easeIn, motion } from "framer-motion"
+import { motion } from "framer-motion"
 import Select from "./Select"
 
 import { useSelector, useDispatch } from "react-redux"
-import { setEbooks, setMaxBooks, setEbookCategory } from "../../store/filterReducer"
+import { setEpubs, setMaxBooks, setEpubCategory, setEbookISBN, setEbookInAuthor, setEbookInTitle, setEbookSubject } from "../../store/filterReducer"
 import { RootState, AppDispatch } from "../../store/store"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
+
+import AdditionalOptions from "./AdditionalOptions"
+import EbookOption from "./EbookOption"
 const MobileFilterMenu = () => {
 
+    const [additionalOptionsOpen, setAdditionalOptionsOpen] = useState(false)
     const dispatch: AppDispatch = useDispatch()
 
     const ebooks = useSelector((state: RootState) => 
-    state.filter.ebooks)
+    state.filter.epubs)
 
-
-    const handleEbookClick = (value: boolean) => {
-        dispatch(setEbooks(value))
+    const handleAdditionalOptionsClick = () => {
+        setAdditionalOptionsOpen(!additionalOptionsOpen)
     }
 
-    const handleEbookCategory = (value: string | null) => {
-        dispatch(setEbookCategory(value))
+    const handleEpubClick = (value: boolean) => {
+        dispatch(setEpubs(value))
     }
 
+    const handleEpubCategory = (value: string | null) => {
+        dispatch(setEpubCategory(value))
+    }
 
+    const handleISBNQuery = (value:string | null ) =>  {
+        dispatch(setEbookISBN(value))
+    }
+
+    const handleAuthorQuery = (value:string | null ) =>  {
+        dispatch(setEbookInAuthor(value))
+    }
+
+    const handleTitleQuery = (value:string | null ) =>  {
+        dispatch(setEbookInTitle(value))
+    }
+
+    const handleSubjectQuery = (value:string | null ) =>  {
+        dispatch(setEbookSubject(value))
+    }
+
+    const redirectQueryOption = (input: string, functionName:  string) => {
+        const functionDirectory: {[key: string]: (value: string | null) => void } = {
+            "isbn": handleISBNQuery,
+            "inAuthor": handleAuthorQuery,
+            "inTitle": handleTitleQuery,
+            "subject": handleSubjectQuery
+        }
+
+        const executeFunction = functionDirectory[functionName]
+        executeFunction(input)
+    }
+    
   return (
     <motion.div className="bg-darker w-full md:w-[80%] lg:w-[70%] p-3 flex flex-col justify-center text-justify rounded-sm gap-3 items-center">
     <Select/>
+    <motion.div className="text-xl pb-2 cursor-pointer flex gap-3" onClick={handleAdditionalOptionsClick}>
+    Zusätzliche Filter 
+    {
+    additionalOptionsOpen ? 
+    <span>&#120;</span> : 
+    <span>&darr;</span> 
+    }
+    </motion.div>
+    {additionalOptionsOpen ? 
+    <AdditionalOptions onChange={redirectQueryOption} /> : 
+    null}
 
-        <motion.div className="flex flex-row gap-3">
-            <motion.div>
-                Mit Preview
-            </motion.div>
-            <motion.div>
-                Mit vollem Text
-            </motion.div>
-           
-            <motion.div className="flex flex-row gap-3">
-                
-            </motion.div>
-
-        </motion.div>
-
-
-        <motion.div className="flex flex-row gap-3">
-        <motion.div
-
-        className="cursor-pointer"
-        onClick={ebooks ? () => handleEbookClick(false) : () => handleEbookClick(true)}>
-                     Nur Ebooks
-                </motion.div>
-    {ebooks &&  <motion.div className="text-sm">         
-            <motion.div
-            className="cursor-pointer"
-            initial={{opacity: 0, x: -50}}
-            animate={{opacity: 1, x: 0}}
-            transition={{duration: 0.5, ease: easeIn}}
-            onClick={() => handleEbookCategory("free-ebooks")}
-            >
-                Nur kostenlose Ebooks
-            </motion.div>
-            <motion.div
-            className="cursor-pointer"
-            initial={{opacity: 0, x: -50}}
-            animate={{opacity: 1, x: 0}}
-            transition={{duration: 1, ease: easeIn}}
-            onClick={() => handleEbookCategory("paid-ebooks")}
-            >
-                Nur kostenpflichtige Ebooks
-            </motion.div>
-            </motion.div>
-}        </motion.div>
-
+<EbookOption onEpubClick={handleEpubClick} onEpubCategory={handleEpubCategory} />
     </motion.div>
 
     )

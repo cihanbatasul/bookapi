@@ -17,6 +17,8 @@ const AnimatedRoutes = () => {
 
 <AnimatePresence mode="wait">
 
+
+
 <Routes location={location} key={location.pathname}>
     <Route path="/" element={<Home/>}/>
     <Route path="/search" element={<SearchPage/>}/>
@@ -24,7 +26,6 @@ const AnimatedRoutes = () => {
     <Route path="/book/:id" element={<BookView/>}/>
 
 </Routes>
-
 </AnimatePresence>
 
 

@@ -24,9 +24,9 @@ const FullBookVolume: FC<GoogleBooksVolume> = ({...book}) => {
      {/* Header */}
        <motion.div className="p-1 md:p-3 lg:p-3  ">
         {isMobile ?         <img src={book.volumeInfo.imageLinks.thumbnail}/> 
-        :         
-        <img className="w-[30%]" src={book.volumeInfo.imageLinks.large}/>
-}
+        : book.volumeInfo.imageLinks.large !== undefined && book.volumeInfo.imageLinks.large !== null && book.volumeInfo.imageLinks.large !== "" ?         
+        <img className="w-[30%]" src={book.volumeInfo.imageLinks.extraLarge}/> : <img className="w-[30%]" src={book.volumeInfo.imageLinks.thumbnail}/>}
+
        <h1 className="text-2xl">{book.volumeInfo.title}</h1>
 
 <motion.div className="flex flex-row gap-3">
@@ -111,6 +111,15 @@ const FullBookVolume: FC<GoogleBooksVolume> = ({...book}) => {
             <motion.div className="text-justify">
                 {book.volumeInfo.description}
             </motion.div>
+            
+                <motion.div className="flex flex-row gap-3">
+                <p>Altersfreigabe:</p>
+                {book.volumeInfo.maturityRating}
+                </motion.div>
+                <motion.div className="flex flex-row gap-3">
+                <p>Verkäuflichkeit:</p>
+                {book.saleInfo.saleability}
+                </motion.div>
         </motion.div>
 
 

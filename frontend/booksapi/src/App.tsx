@@ -30,14 +30,13 @@ function App() {
   
 
   return (
-    <motion.div className='w-full h-full'>
 <Provider store={store}>
   <Router>
-    {isMobile ? <MobileNav/>  : <Nav/> }   
+    {isMobile ? <MobileNav/>  : <Nav/> } 
    <AnimatedRoutes/>
    </Router>
+
    </Provider>
-   </motion.div>
 
   )
 }

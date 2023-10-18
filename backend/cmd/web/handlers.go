@@ -19,10 +19,18 @@ func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) SearchForBook(w http.ResponseWriter, r *http.Request) {
+
 	apiKey := os.Getenv("API_KEY")
 	searchQuery := r.URL.Query().Get("query")
 	startIndexStr := r.URL.Query().Get("startIndex")
 	maxResultsStr := r.URL.Query().Get("maxResults")
+	inTitle := r.URL.Query().Get("intitle")
+	inAuthor := r.URL.Query().Get("inauthor")
+	isbn := r.URL.Query().Get("isbn")
+	subject := r.URL.Query().Get("subject")
+	epub := r.URL.Query().Get("download")
+	ebookCost := r.URL.Query().Get("filter")
+	orderBy := r.URL.Query().Get("orderby")
 
 	startIndex, err := strconv.Atoi(startIndexStr)
 	if err != nil {
@@ -34,7 +42,31 @@ func (app *application) SearchForBook(w http.ResponseWriter, r *http.Request) {
 		maxResults = 10
 	}
 
-	searchResult, err := app.books.SearchBook(searchQuery, apiKey, startIndex, maxResults)
+	decodedParams := app.decodeParams(map[string]string{
+		"query":     searchQuery,
+		"intitle":   inTitle,
+		"inauthor":  inAuthor,
+		"isbn":      isbn,
+		"subject":   subject,
+		"ebookCost": ebookCost,
+		"epub":      epub,
+		"orderby":   orderBy,
+	})
+
+	searchResult, err := app.books.SearchBook(
+		decodedParams["query"],
+		apiKey,
+		startIndex,
+		maxResults,
+		decodedParams["inauthor"],
+		decodedParams["intitle"],
+		decodedParams["isbn"],
+		decodedParams["subject"],
+		decodedParams["ebookCost"],
+		decodedParams["epub"],
+		decodedParams["orderby"],
+	)
+
 	if err != nil {
 		app.server_error(w, err)
 		return
@@ -52,7 +84,6 @@ func (app *application) SearchForBook(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		app.server_error(w, err)
 	}
-
 }
 
 func (app *application) RetrieveBookByID(w http.ResponseWriter, r *http.Request) {
