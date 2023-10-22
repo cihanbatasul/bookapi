@@ -13,7 +13,6 @@ export interface Query {
     etag: string
     selfLink: string
     volumeInfo: VolumeInfo
-    onClick: (input: string) => void
 }
 
 
@@ -22,4 +21,18 @@ export interface QueryOuter {
     items: Query[]
 }
 
+interface imageLinks {
+    smallThumbnail: string;
+    thumbnail: string;
+    small: string;
+    medium: string;
+    large: string;
+    extraLarge: string;
+  }
 
+
+
+export interface VolumeInfoWithImages {
+    query: Query
+    imageLinks: imageLinks
+}

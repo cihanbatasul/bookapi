@@ -8,5 +8,6 @@ func (app *application) Routes() *http.ServeMux {
 	mux.HandleFunc("/", app.Home)
 	mux.HandleFunc("/search/", app.SearchForBook)
 	mux.HandleFunc("/searchbook/", app.RetrieveBookByID)
+	mux.HandleFunc("/getimg/", app.ImageGetter)
 	return mux
 }

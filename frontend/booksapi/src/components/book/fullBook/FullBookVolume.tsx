@@ -5,7 +5,7 @@ import { FC, useEffect, useState } from "react"
 
 const FullBookVolume: FC<GoogleBooksVolume> = ({...book}) => {
 
-    const [isMobile, setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 780)
 
 
 
@@ -16,16 +16,17 @@ const FullBookVolume: FC<GoogleBooksVolume> = ({...book}) => {
         return (
             window.removeEventListener('resize', () => setIsMobile(window.innerWidth <= 780) )
         )
-    }, [window.innerWidth])
+    }, [])
+
+    
 
   return (
-    <motion.div className="flex flex-col p-3 gap-12 bg-light text-black ">
+    <motion.div className="min-h-screen flex flex-col p-3 gap-12 w-2/3  ">
         
      {/* Header */}
        <motion.div className="p-1 md:p-3 lg:p-3  ">
-        {isMobile ?         <img src={book.volumeInfo.imageLinks.thumbnail}/> 
-        : book.volumeInfo.imageLinks.large !== undefined && book.volumeInfo.imageLinks.large !== null && book.volumeInfo.imageLinks.large !== "" ?         
-        <img className="w-[30%]" src={book.volumeInfo.imageLinks.extraLarge}/> : <img className="w-[30%]" src={book.volumeInfo.imageLinks.thumbnail}/>}
+       <img 
+       src={book.volumeInfo.imageLinks.thumbnail}/>
 
        <h1 className="text-2xl">{book.volumeInfo.title}</h1>
 

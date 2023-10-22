@@ -112,3 +112,24 @@ func (b *BookServiceImplementation) RetrieveBook(bookID string, apiKey string) (
 	return searchResult, nil
 
 }
+
+func (b *BookServiceImplementation) RetrieveBookImages(bookID, apiKey string) (GoogleBookImageLinks, error) {
+	fullVolume, err := b.RetrieveBook(bookID, apiKey)
+	if err != nil {
+		return GoogleBookImageLinks{}, err
+	}
+
+	imageLinks := fullVolume.VolumeInfo.ImageLinks
+
+	bookImageLinks := GoogleBookImageLinks{
+		SmallThumbnail: imageLinks.SmallThumbnail,
+		Thumbnail:      imageLinks.Thumbnail,
+		Small:          imageLinks.Small,
+		Medium:         imageLinks.Medium,
+		Large:          imageLinks.Large,
+		ExtraLarge:     imageLinks.ExtraLarge,
+	}
+
+	return bookImageLinks, nil
+
+}

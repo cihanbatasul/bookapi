@@ -6,8 +6,8 @@ interface FilterState {
   epubs: boolean
   epubCategory: string | null
   ISBN:    string | null
-  intitle: string | null
-  inauthor: string | null 
+  inTitle: string | null
+  inAuthor: string | null 
   subject: string | null
   orderBy: string | null 
 }
@@ -18,8 +18,8 @@ const initialState: FilterState = {
   epubs: false,
   epubCategory: "",
   ISBN: "",
-  intitle: "", 
-  inauthor: "",
+  inTitle: "", 
+  inAuthor: "",
   subject: "",
   orderBy: "",
 }
@@ -44,10 +44,10 @@ const filterSlice = createSlice({
       state.ISBN = action.payload
     },
     setEbookInTitle:  (state, action: PayloadAction<string  | null>) => {
-      state.intitle = action.payload
+      state.inTitle = action.payload
     },
     setEbookInAuthor:  (state, action: PayloadAction<string  | null>) => {
-      state.inauthor = action.payload
+      state.inAuthor = action.payload
     },
     setEbookSubject:  (state, action: PayloadAction<string  | null>) => {
       state.subject = action.payload

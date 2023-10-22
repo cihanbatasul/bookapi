@@ -14,8 +14,6 @@ const MobileFilterMenu = () => {
     const [additionalOptionsOpen, setAdditionalOptionsOpen] = useState(false)
     const dispatch: AppDispatch = useDispatch()
 
-    const ebooks = useSelector((state: RootState) => 
-    state.filter.epubs)
 
     const handleAdditionalOptionsClick = () => {
         setAdditionalOptionsOpen(!additionalOptionsOpen)
@@ -58,7 +56,7 @@ const MobileFilterMenu = () => {
     }
     
   return (
-    <motion.div className="bg-darker w-full md:w-[80%] lg:w-[70%] p-3 flex flex-col justify-center text-justify rounded-sm gap-3 items-center">
+    <motion.div className="dark:bg-gray-800 w-full md:w-[80%] lg:w-[70%] p-3 flex flex-col justify-center text-justify rounded-sm gap-3 items-center text-black dark:text-inherit">
     <Select/>
     <motion.div className="text-xl pb-2 cursor-pointer flex gap-3" onClick={handleAdditionalOptionsClick}>
     Zusätzliche Filter 

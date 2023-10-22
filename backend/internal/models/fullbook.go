@@ -70,3 +70,16 @@ type GoogleBooksVolume struct {
 		QuoteSharingAllowed bool   `json:"quoteSharingAllowed,omitempty"`
 	} `json:"accessInfo,omitempty"`
 }
+
+type GoogleBookImageLinks struct {
+	SmallThumbnail string `json:"smallThumbnail,omitempty"`
+	Thumbnail      string `json:"thumbnail,omitempty"`
+	Small          string `json:"small,omitempty"`
+	Medium         string `json:"medium,omitempty"`
+	Large          string `json:"large,omitempty"`
+	ExtraLarge     string `json:"extraLarge,omitempty"`
+}
+
+type GoogleImageLinksContainer struct {
+	GoogleBookImageLinks
+}

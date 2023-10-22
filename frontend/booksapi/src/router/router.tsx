@@ -5,6 +5,7 @@ import Home from '../views/Home'
 import SearchPage from '../views/SearchPage'
 import SearchResults from '../views/SearchResults'
 import BookView from "../views/BookView"
+import UserProfile from "../views/UserProfile"
 
 
 const AnimatedRoutes = () => {
@@ -24,6 +25,7 @@ const AnimatedRoutes = () => {
     <Route path="/search" element={<SearchPage/>}/>
     <Route path="/searchresults" element={<SearchResults/>}/>
     <Route path="/book/:id" element={<BookView/>}/>
+    <Route path="/profile" element={<UserProfile/>}/>
 
 </Routes>
 </AnimatePresence>

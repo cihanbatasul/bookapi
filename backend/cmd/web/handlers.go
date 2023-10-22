@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -95,19 +94,47 @@ func (app *application) RetrieveBookByID(w http.ResponseWriter, r *http.Request)
 
 	apiKey := os.Getenv("API_KEY")
 	bookID := r.URL.Query().Get("id")
+
 	searchResult, err := app.books.RetrieveBook(bookID, apiKey)
 	if err != nil {
 		app.server_error(w, err)
 		return
 	}
-	log.Println(searchResult)
 	w.Header().Set("Content-Type", "application/json")
 	jsonResult, err := json.Marshal(searchResult)
 	if err != nil {
 		app.server_error(w, err)
 		return
 	}
-	log.Println(jsonResult)
+
+	_, err = w.Write(jsonResult)
+	if err != nil {
+		app.server_error(w, err)
+	}
+}
+
+func (app *application) ImageGetter(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		w.Header().Set("Allow", "GET")
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		return
+	}
+
+	apiKey := os.Getenv("API_KEY")
+	bookID := r.URL.Query().Get("id")
+
+	searchResult, err := app.books.RetrieveBookImages(bookID, apiKey)
+	if err != nil {
+		app.server_error(w, err)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	jsonResult, err := json.Marshal(searchResult)
+	if err != nil {
+		app.server_error(w, err)
+		return
+	}
 
 	_, err = w.Write(jsonResult)
 	if err != nil {

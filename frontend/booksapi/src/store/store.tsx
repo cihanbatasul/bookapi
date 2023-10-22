@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit"
 import filterReducer from './filterReducer'
-
+import designReducer from "./designReducer"
 const store = configureStore({
     reducer: {
         filter: filterReducer,
+        designer: designReducer
     }
 })
 

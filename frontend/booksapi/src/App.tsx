@@ -5,14 +5,16 @@ import MobileNav from './components/nav/MobileNav'
 import Nav from './components/nav/Nav'
 
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
-import { Provider } from 'react-redux'
-import store from './store/store'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Provider, useSelector } from 'react-redux'
+import store, { RootState } from './store/store'
+import MobilePopUp from './components/nav/MobilePopUp'
 
 
 function App() {
 
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 780)
+  const [isMobilePopup, setIsMobilePopup] = useState(false)
 
   useEffect(() => {
 
@@ -22,17 +24,23 @@ function App() {
   
   window.addEventListener('resize', handleWindowResize)
 
+  
   return () => (
     window.removeEventListener('resize', handleWindowResize)
   )
   }, [])
 
-  
+  const handlePopUp = () => {
+    setIsMobilePopup(!isMobilePopup)
+  }
 
   return (
 <Provider store={store}>
   <Router>
-    {isMobile ? <MobileNav/>  : <Nav/> } 
+  {isMobile ? <MobileNav onPopup={handlePopUp} />  : <Nav/> } 
+  <AnimatePresence>
+  {isMobilePopup && <MobilePopUp/>}
+  </AnimatePresence>
    <AnimatedRoutes/>
    </Router>
 
