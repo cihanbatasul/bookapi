@@ -5,6 +5,9 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
+
+	"github.com/golang-jwt/jwt"
 )
 
 func (app *application) Home(w http.ResponseWriter, r *http.Request) {
@@ -140,4 +143,89 @@ func (app *application) ImageGetter(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		app.server_error(w, err)
 	}
+}
+
+type UserRegisterRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	UserName string `json:"userName"`
+}
+
+func (app *application) Register(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		w.Header().Set("Allow", "POST")
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		return
+	}
+
+	var reqBody UserRegisterRequest
+
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&reqBody); err != nil {
+		app.server_error(w, err)
+		return
+	}
+
+	salt, err := app.hashes.GenerateRandomSalt()
+	if err != nil {
+		app.server_error(w, err)
+		return
+	}
+
+	hashedPassword, err := app.hashes.HashPassword([]byte(reqBody.Password), []byte(salt))
+	if err != nil {
+		app.server_error(w, err)
+		return
+	}
+
+	_, err = app.users.Insert(reqBody.Email, string(hashedPassword), reqBody.UserName)
+	if err != nil {
+		app.server_error(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+
+}
+
+type UserLoginBody struct {
+	Email    string `json:"userEmail"`
+	Password string `json:"userPassword"`
+}
+
+func (app *application) Login(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		w.Header().Set("Allow", "POST")
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		return
+	}
+	secret := []byte(os.Getenv("JWT_SECRET"))
+
+	var User UserLoginBody
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&User); err != nil {
+		app.server_error(w, err)
+		return
+	}
+
+	userID, err := app.users.Authenticate(User.Email, User.Password)
+	if err != nil {
+		app.server_error(w, err)
+		return
+	}
+
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["user_id"] = userID
+	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+	tokenString, err := token.SignedString([]byte(secret))
+	if err != nil {
+		app.server_error(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	response := map[string]string{"token": tokenString}
+	json.NewEncoder(w).Encode(response)
 }

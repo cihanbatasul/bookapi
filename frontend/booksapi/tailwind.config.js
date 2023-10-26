@@ -12,6 +12,9 @@ export default {
         darker: '#857468',
         darkGreen: '#1f3f2a',
         lightGreen: '#4e6f58',
+      },
+      backgroundImage: {
+        "space-pattern": "url('./assets/spacy.jpeg')"
       }
     },
   },

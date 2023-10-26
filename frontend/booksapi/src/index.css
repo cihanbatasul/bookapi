@@ -46,3 +46,26 @@
 .flip-card-back {
   transform: rotateY(180deg);
 }
+
+.img-container {
+  perspective: 400px;
+}
+
+.img{
+  animation: animateImage 5s linear infinite;
+  transition: all 1.5s ease-in-out;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+@keyframes animateImage {
+  0%{
+    transform: rotateX(0deg);
+  }
+  50%{
+    transform: rotateX(15deg);
+  }
+  100%{
+    transform: rotateX(0deg);
+  }
+}

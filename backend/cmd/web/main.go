@@ -1,7 +1,9 @@
 package main
 
 import (
+	"crypto/rand"
 	"database/sql"
+	"encoding/base64"
 	"flag"
 	"fmt"
 	"log"
@@ -19,6 +21,8 @@ type application struct {
 	error_log *log.Logger
 	info_log  *log.Logger
 	books     *models.BookServiceImplementation
+	users     *models.UserServiceImplementation
+	hashes    *models.HashServiceImplementation
 }
 
 func openDB(dsn string) (*sql.DB, error) {
@@ -34,14 +38,25 @@ func openDB(dsn string) (*sql.DB, error) {
 	return db, nil
 }
 
+func generateRandomSecret(length int) (string, error) {
+	secretBytes := make([]byte, length)
+	_, err := rand.Read(secretBytes)
+	if err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(secretBytes), nil
+}
+
 func main() {
+
 	if err := godotenv.Load("../../.env"); err != nil {
 		log.Fatalf("Fehler beim Laden der .env-Datei %v", err)
 	}
 
 	cors := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
+		AllowedOrigins: []string{"http://localhost:5173"},
 		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
+		AllowedHeaders: []string{"Content-Type"},
 	})
 
 	addr := flag.String("addr", ":5000", "HTTP network address")
@@ -59,11 +74,13 @@ func main() {
 	}
 
 	defer db.Close()
-	bookService := models.BookServiceImplementation{}
+
 	app := &application{
 		error_log: error_log,
 		info_log:  info_log,
-		books:     &bookService,
+		books:     &models.BookServiceImplementation{},
+		users:     &models.UserServiceImplementation{DB: db},
+		hashes:    &models.HashServiceImplementation{},
 	}
 
 	handler := cors.Handler(app.Routes())
@@ -74,7 +91,8 @@ func main() {
 		Handler:  handler,
 	}
 
-	info_log.Println("Starting server on port ", *addr)
+	info_log.Println("Starting server on port ",
+		*addr)
 
 	err = srv.ListenAndServe()
 	if err != nil {
