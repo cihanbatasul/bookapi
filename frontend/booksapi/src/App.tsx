@@ -1,50 +1,39 @@
 import './index.css'
-import  AnimatedRoutes from './router/router'
+import AnimatedRoutes from './router/router'
 import { BrowserRouter as Router } from 'react-router-dom'
-import MobileNav from './components/nav/MobileNav'
-import Nav from './components/nav/Nav'
 
-import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { Provider, useSelector } from 'react-redux'
-import store, { RootState } from './store/store'
+import { useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
+import { Provider } from 'react-redux'
+import store from './store/store'
 import MobilePopUp from './components/nav/MobilePopUp'
 
+import { ThemeProvider } from './components/ThemeProvider'
+import { Toaster } from './shadcncomponents/ui/toaster'
 
+import NavWrapper from './components/nav/NavWrapper'
+import { logoutUser } from './components/nav'
 function App() {
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 780)
   const [isMobilePopup, setIsMobilePopup] = useState(false)
 
-  useEffect(() => {
-
-  const handleWindowResize = () => {
-    setIsMobile(window.innerWidth <= 780)
-  }
-  
-  window.addEventListener('resize', handleWindowResize)
-
-  
-  return () => (
-    window.removeEventListener('resize', handleWindowResize)
-  )
-  }, [])
-
-  const handlePopUp = () => {
-    setIsMobilePopup(!isMobilePopup)
-  }
 
   return (
-<Provider store={store}>
-  <Router>
-  {isMobile ? <MobileNav onPopup={handlePopUp} />  : <Nav/> } 
-  <AnimatePresence>
-  {isMobilePopup && <MobilePopUp/>}
-  </AnimatePresence>
-   <AnimatedRoutes/>
-   </Router>
+    <ThemeProvider defaultTheme='system' storageKey='vite-ui-theme'>
+      <Provider store={store}>
+        <Router>
+          <NavWrapper isMobile={isMobile} setIsMobile={setIsMobile} setIsMobilePopUp={setIsMobilePopup} isMobilePopUp={isMobilePopup} />
+          <Toaster />
+          <AnimatePresence>
+            {(isMobilePopup && isMobile) && <MobilePopUp signOutOnClick={logoutUser} />}
+          </AnimatePresence>
 
-   </Provider>
+          <AnimatedRoutes />
+        </Router>
+
+      </Provider>
+    </ThemeProvider>
 
   )
 }

@@ -16,7 +16,7 @@ const PasswordInput: FC<props> = ({...props}) => {
   return (
 
     <motion.div className={` ${props.fullWidth == true ? 'w-full' : ''} flex flex-row gap-2 items-center `} >
-        <motion.div className={`w-[30px] ${props.PlacerholderText === "Password Repeat" ? 'md:hidden lg:hidden' : ''}`}>
+        <motion.div className={`w-[30px] ${props.PlacerholderText === "Repeat Password" ? 'md:hidden lg:hidden' : ''}`}>
 <LockClosedIcon/>
         </motion.div>
         <div className=" relative z-0 w-full mb-6 group">

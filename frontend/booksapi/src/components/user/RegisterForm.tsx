@@ -103,7 +103,7 @@ const RegisterForm = () => {
       <Input LabelText="Email" onChange={handleEmailChange} type="email" />
       <motion.div className="w-full flex flex-col md:flex-row lg:flex-row gap-3">
         <PasswordInput PlacerholderText="Password" isPassword={isPassword} onVisible={setIsPassword} onChange={handlePasswordChange} />
-        <PasswordInput PlacerholderText="Password Repeat" isPassword={isPassword} onChange={handlePasswordRepeat} onVisible={setIsPassword}  />
+        <PasswordInput PlacerholderText="Repeat Password" isPassword={isPassword} onChange={handlePasswordRepeat} onVisible={setIsPassword}  />
       </motion.div>
 
       <Input LabelText="User name" onChange={handleUserNameChange} type="email" />

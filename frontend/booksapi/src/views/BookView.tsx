@@ -37,7 +37,7 @@ const BookView = () => {
 
 
   return (
-    <motion.div className="flex flex-row bg-white dark:bg-gray-900 text-black dark:text-inherit ">
+    <motion.div className="flex flex-col bg-white dark:bg-gray-900 text-black dark:text-inherit ">
       {loading ? (
         <motion.div>Loading...</motion.div>
       ) : book ? (

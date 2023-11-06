@@ -1,13 +1,11 @@
 import { motion } from "framer-motion"
 import { GoogleBooksVolume } from "../../../static/FullBook"
 import { FC, useEffect, useState } from "react"
-
+import AddToShelveButton from "../../profile/bookshelves/AddToShelveButton"
 
 const FullBookVolume: FC<GoogleBooksVolume> = ({...book}) => {
 
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 780)
-
-
 
     useEffect(() => {
 
@@ -21,11 +19,11 @@ const FullBookVolume: FC<GoogleBooksVolume> = ({...book}) => {
     
 
   return (
-    <motion.div className="min-h-screen flex flex-col p-3 gap-12 w-2/3  ">
+    <motion.div className="min-h-screen flex flex-col p-3 gap-12  ">
         
      {/* Header */}
-       <motion.div className="p-1 md:p-3 lg:p-3  ">
-       <img 
+       <motion.div className="flex flex-col items-center justify-center text-center gap-3 p-1 md:p-3 lg:p-3  ">
+       <img className="rounded-r-md" 
        src={book.volumeInfo.imageLinks.thumbnail}/>
 
        <h1 className="text-2xl">{book.volumeInfo.title}</h1>
@@ -38,6 +36,7 @@ const FullBookVolume: FC<GoogleBooksVolume> = ({...book}) => {
         {book.volumeInfo.publishedDate.slice(0, 4)}
     </motion.div>
 </motion.div>
+    <AddToShelveButton bookID={book.id}/>
        </motion.div>
 
 
@@ -124,9 +123,6 @@ const FullBookVolume: FC<GoogleBooksVolume> = ({...book}) => {
         </motion.div>
 
 
-        <motion.div className="flex flex-col gap-3">
-
-        </motion.div>
     </motion.div>
 
         </motion.div>

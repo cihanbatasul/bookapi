@@ -1,10 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit"
 import filterReducer from './filterReducer'
 import designReducer from "./designReducer"
+import userReducer from "./userReducer"
+
+
 const store = configureStore({
     reducer: {
         filter: filterReducer,
-        designer: designReducer
+        designer: designReducer,
+        user: userReducer
     }
 })
 
