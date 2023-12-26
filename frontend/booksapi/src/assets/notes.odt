@@ -1,0 +1,4 @@
+Man kann onMounted benutzen, um intitial eine Funktion auszuführen usw.
+    Beispiel hierfür wäre ist das Erkennen des Viewports. Man erstellt eine Funktion wie checkIfMobile und führt diese OnMounted aus, fügt dann einen Eventlistener hinzu der beim Resizen die Funktion erneut ausführt.
+    Um den Eventlistener, so wie es sein sollte, wieder zu entfernen, benutzt man onBeforeUnmount.
+    

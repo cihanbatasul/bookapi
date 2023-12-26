@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@intrinsicai/gbnfgen": "^0.10.0",
+    "lottie-react": "^2.4.0"
+  }
+}
